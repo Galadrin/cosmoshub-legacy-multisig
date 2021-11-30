@@ -161,8 +161,8 @@ class MultiSigForm extends React.Component {
                     width="100%"
                     placeholder={
                       pubkeyGroup.isPubkey
-                        ? "Akd/qKMWdZXyiMnSu6aFLpQEGDO0ijyal9mXUIcVaPNX"
-                        : "cosmos1vqpjljwsynsn58dugz0w8ut7kun7t8ls2qkmsq"
+                        ? "Pubkey"
+                        : "cro1...."
                     }
                     error={pubkeyGroup.keyError}
                     onBlur={(e) => {

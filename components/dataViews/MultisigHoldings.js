@@ -5,12 +5,16 @@ const MultisigHoldings = (props) => {
     if (uatom === 0) return 0;
     return uatom / 1000000;
   };
+  const basecroToCro = (basecro) => {
+    if (basecro === 0) return 0;
+    return basecro / 100000000;
+  };
 
   return (
     <StackableContainer lessPadding fullHeight>
       <h2>Holdings</h2>
       <StackableContainer lessPadding lessMargin>
-        <span>{props.holdings} ATOM</span>
+        <span>{props.holdings} CRO</span>
       </StackableContainer>
       <style jsx>{`
         span {

@@ -10,17 +10,17 @@ const DevHelper = (props) => (
         <a href="/create">Create Multisig</a>
       </li>
       <li>
-        <a href="/multi/cosmos10nmdf6nt2qzvgn9q2nuwmmfc359yfesmu3gw22">
+        <a href="/multi/cro1tel9pm3g9mu3cl8d78d4z98fp5s9d5mvc8qcty">
           View Multisig
         </a>
       </li>
       <li>
-        <a href="/multi/cosmos10nmdf6nt2qzvgn9q2nuwmmfc359yfesmu3gw22/transaction/295630000375202310">
+        <a href="/multi/cro1tel9pm3g9mu3cl8d78d4z98fp5s9d5mvc8qcty/transaction/295630000375202310">
           View/Sign Transaction
         </a>
       </li>
     </ul>
-    <a href="https://github.com/samepant/cosmoshub-legacy-multisig">
+    <a href="https://github.com/Galadrin/cosmoshub-legacy-multisig">
       View on Github
     </a>
 

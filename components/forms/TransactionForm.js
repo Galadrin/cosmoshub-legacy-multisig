@@ -15,7 +15,7 @@ class TransactionForm extends React.Component {
       toAddress: "",
       amount: 0,
       memo: "",
-      gas: 200000,
+      gas: 500000,
       processing: false,
       addressError: "",
     };
@@ -31,7 +31,7 @@ class TransactionForm extends React.Component {
     const msgSend = {
       fromAddress: this.props.address,
       toAddress: toAddress,
-      amount: coins(amount * 1000000, process.env.NEXT_PUBLIC_DENOM),
+      amount: coins(amount * 10**process.env.NEXT_PUBLIC_DECIMAL, process.env.NEXT_PUBLIC_DENOM),
     };
     const msg = {
       typeUrl: "/cosmos.bank.v1beta1.MsgSend",
@@ -39,7 +39,7 @@ class TransactionForm extends React.Component {
     };
     const gasLimit = gas;
     const fee = {
-      amount: coins(6000, process.env.NEXT_PUBLIC_DENOM),
+      amount: coins(12500, process.env.NEXT_PUBLIC_DENOM),
       gas: gasLimit.toString(),
     };
 
@@ -87,12 +87,12 @@ class TransactionForm extends React.Component {
             value={this.state.toAddress}
             onChange={this.handleChange}
             error={this.state.addressError}
-            placeholder="cosmos1fjrzd7ycxzse05zme3r2zqwpsvcrskv80wj82h"
+            placeholder="cro1tel9pm3g9mu3cl8d78d4z98fp5s9d5mvc8qcty"
           />
         </div>
         <div className="form-item">
           <Input
-            label="Amount (ATOM)"
+            label="Amount (CRO)"
             name="amount"
             type="number"
             value={this.state.amount}
@@ -101,7 +101,7 @@ class TransactionForm extends React.Component {
         </div>
         <div className="form-item">
           <Input
-            label="Gas Limit (UATOM)"
+            label="Gas Limit (basecro)"
             name="gas"
             type="number"
             value={this.state.gas}
