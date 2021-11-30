@@ -138,7 +138,7 @@ class MultiSigForm extends React.Component {
                     label="Address"
                     name="address"
                     width="100%"
-                    placeholder="cosmos1vqpjljwsynsn58dugz0w8ut7kun7t8ls2qkmsq"
+                    placeholder="cro1tel9pm3g9mu3cl8d78d4z98fp5s9d5mvc8qcty"
                     error={pubkeyGroup.keyError}
                     onBlur={(e) => {
                       this.handleKeyBlur(index, e);

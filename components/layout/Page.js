@@ -4,7 +4,7 @@ import StackableContainer from "./StackableContainer";
 const Page = (props) => {
   return (
     <div className="page">
-      <Head title={props.title || "Cosmos Multisig Manager"} />
+      <Head title={props.title || "Crypto.org Multisig Manager"} />
       <div className="container">
         {props.rootMultisig && (
           <div className="nav">
@@ -22,7 +22,7 @@ const Page = (props) => {
       <div className="footer-links">
         <StackableContainer base lessPadding lessMargin>
           <p>
-            <a href="https://github.com/samepant/cosmoshub-legacy-multisig">
+            <a href="https://github.com/Galadrin/cosmoshub-legacy-multisig">
               View on github
             </a>
           </p>
