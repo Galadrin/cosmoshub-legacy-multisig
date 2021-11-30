@@ -26,12 +26,12 @@ export async function getServerSideProps(context) {
     const accountOnChain = await getMultisigAccount(multisigAddress, client);
 
     return {
-      props: { accountOnChain, holdings: holdings.amount / 1000000 },
+      props: { accountOnChain, holdings: holdings.amount / 100000000 },
     };
   } catch (error) {
     console.log(error);
     return {
-      props: { error: error.message, holdings: holdings.amount / 1000000 },
+      props: { error: error.message, holdings: holdings.amount / 100000000 },
     };
   }
 }
