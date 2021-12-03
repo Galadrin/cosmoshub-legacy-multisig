@@ -62,9 +62,9 @@ const Page = (props) => {
           min-height: 100vh;
           background: linear-gradient(
             240.16deg,
-            #3f023c 10.46%,
-            #561253 54.88%,
-            #580a55 94.89%
+            #070e27 10.46%,
+            #1F263C 54.88%,
+            #070e27 94.89%
           );
           font-size: 16px;
           margin: 0;
