@@ -29,7 +29,7 @@ const DevHelper = (props) => (
         position: fixed;
         bottom: 0;
         right: 0;
-        background: darkseagreen;
+        background: #070e27;
         padding: 1em;
       }
 

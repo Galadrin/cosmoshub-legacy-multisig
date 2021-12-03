@@ -67,7 +67,7 @@ class FindMultisigForm extends React.Component {
             align-items: center;
           }
           .error {
-            color: coral;
+            color: #070e27;
             font-size: 0.8em;
             text-align: left;
             margin: 0.5em 0;
