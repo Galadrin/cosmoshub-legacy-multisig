@@ -7,13 +7,16 @@ import Button from "../../components/inputs/Button";
 import Input from "../../components/inputs/Input";
 import StackableContainer from "../layout/StackableContainer";
 
+let emptyMsgSendGroup = () => {
+  return { toAddress: "", amount: "", keyError: "" };
+};
+
 class TransactionForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      toAddress: "",
-      amount: 0,
+      txMsg: [emptyMsgSendGroup()],
       memo: "",
       gas: 500000,
       processing: false,
@@ -26,97 +29,151 @@ class TransactionForm extends React.Component {
       [e.target.name]: e.target.value,
     });
   };
+  
+  handleKeyGroupChange = (index, e) => {
+    const { txMsg } = this.state;
+    txMsg[index][e.target.name] = e.target.value;
+    this.setState({ txMsg });
+  };
 
-  createTransaction = (toAddress, amount, gas) => {
+  handleAddKey = () => {
+    this.setState({ txMsg: this.state.txMsg.concat(emptyMsgSendGroup())});
+  };
+
+  handleCreate = async () => {
+    this.setState({ processing: true });
+    const tx = this.createTransaction(
+      this.state.txMsg,
+      this.state.gas
+    );
+    console.log(tx);
+    const dataJSON = JSON.stringify(tx);
+    const res = await axios.post("/api/transaction", { dataJSON });
+    const { transactionID } = res.data;
+    this.props.router.push(
+      `${this.props.address}/transaction/${transactionID}`
+    );
+  };
+
+  handleKeyBlur = async (index, e) => {
+    let address = e.target.value;
+  };
+
+  createSendMessage = (toAddress, amount) => {
     const msgSend = {
       fromAddress: this.props.address,
       toAddress: toAddress,
-      amount: coins(amount * 10**process.env.NEXT_PUBLIC_DECIMAL, process.env.NEXT_PUBLIC_DENOM),
+      amount: coins(amount * 10**Number(process.env.NEXT_PUBLIC_DECIMAL), process.env.NEXT_PUBLIC_DENOM),
     };
-    const msg = {
+    return {
       typeUrl: "/cosmos.bank.v1beta1.MsgSend",
       value: msgSend,
     };
+  };
+
+  createTransaction = (msgList, gas) => {
     const gasLimit = gas;
     const fee = {
       amount: coins(12500, process.env.NEXT_PUBLIC_DENOM),
       gas: gasLimit.toString(),
     };
+    const messages = [];
+    for (let m of msgList){
+      messages.push(this.createSendMessage(m.toAddress, m.amount));
+    }
 
     return {
       accountNumber: this.props.accountOnChain.accountNumber,
       sequence: this.props.accountOnChain.sequence,
       chainId: process.env.NEXT_PUBLIC_CHAIN_ID,
-      msgs: [msg],
+      msgs: messages,
       fee: fee,
       memo: this.state.memo,
     };
   };
 
-  handleCreate = async () => {
-    if (this.state.toAddress.length === 42) {
-      this.setState({ processing: true });
-      const tx = this.createTransaction(
-        this.state.toAddress,
-        this.state.amount,
-        this.state.gas
-      );
-      console.log(tx);
-      const dataJSON = JSON.stringify(tx);
-      const res = await axios.post("/api/transaction", { dataJSON });
-      const { transactionID } = res.data;
-      this.props.router.push(
-        `${this.props.address}/transaction/${transactionID}`
-      );
-    } else {
-      this.setState({ addressError: "Use a valid cosmos-hub address" });
-    }
-  };
-
   render() {
     return (
-      <StackableContainer lessPadding>
-        <button className="remove" onClick={this.props.closeForm}>
-          ✕
-        </button>
-        <h2>Create New transaction</h2>
-        <div className="form-item">
-          <Input
-            label="To Address"
-            name="toAddress"
-            value={this.state.toAddress}
-            onChange={this.handleChange}
-            error={this.state.addressError}
-            placeholder="cro1tel9pm3g9mu3cl8d78d4z98fp5s9d5mvc8qcty"
-          />
-        </div>
-        <div className="form-item">
-          <Input
-            label="Amount (CRO)"
-            name="amount"
-            type="number"
-            value={this.state.amount}
-            onChange={this.handleChange}
-          />
-        </div>
-        <div className="form-item">
-          <Input
-            label="Gas Limit (basecro)"
-            name="gas"
-            type="number"
-            value={this.state.gas}
-            onChange={this.handleChange}
-          />
-        </div>
-        <div className="form-item">
-          <Input
-            label="Memo"
-            name="memo"
-            type="text"
-            value={this.state.memo}
-            onChange={this.handleChange}
-          />
-        </div>
+      <>
+        <StackableContainer>
+            <StackableContainer lessPadding>
+              <p>Add the addresses that will make up this multisig.</p>
+            </StackableContainer>
+            {this.state.txMsg.map((msgSendGroup, index) => (
+              <StackableContainer lessPadding lessMargin key={index}>
+                <div className="key-row">
+                  {this.state.txMsg.length > 2 && (
+                    <button
+                      className="remove"
+                      onClick={() => {
+                        this.handleRemove(index);
+                      }}
+                    >
+                      ✕
+                    </button>
+                  )}
+                  <div className="form-item">
+                    <Input
+                      onChange={(e) => {
+                        this.handleKeyGroupChange(index, e);
+                      }}
+                      value={msgSendGroup.toAddress}
+                      label="Address"
+                      name="toAddress"
+                      width="100%"
+                      placeholder="cro1...."
+                      error={msgSendGroup.keyError}
+                      onBlur={(e) => {
+                        this.handleKeyBlur(index, e);
+                      }}
+                    />
+                  </div>
+                  <div className="form-item">
+                    <Input
+                      onChange={(e) => {
+                        this.handleKeyGroupChange(index, e);
+                      }}
+                      value={msgSendGroup.amount}
+                      label="Amount (CRO)"
+                      name="amount"
+                      width="100%"
+                      placeholder="CRO"
+                      error={msgSendGroup.keyError}
+                      onBlur={(e) => {
+                        this.handleKeyBlur(index, e);
+                      }}
+                    />
+                  </div>
+                </div>
+              </StackableContainer>
+            ))}
+
+            <Button label="Add another address" onClick={this.handleAddKey} />
+          </StackableContainer>
+
+        <StackableContainer>
+
+          <StackableContainer lessPadding lessMargin>
+            <div className="form-item">
+              <Input
+                label="Gas Limit (basecro)"
+                name="gas"
+                type="number"
+                value={this.state.gas}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="form-item">
+              <Input
+                label="Memo"
+                name="memo"
+                type="text"
+                value={this.state.memo}
+                onChange={this.handleChange}
+              />
+            </div>
+          </StackableContainer>
+        </StackableContainer>
         <Button label="Create Transaction" onClick={this.handleCreate} />
         <style jsx>{`
           p {
@@ -137,7 +194,7 @@ class TransactionForm extends React.Component {
             top: 10px;
           }
         `}</style>
-      </StackableContainer>
+      </>
     );
   }
 }

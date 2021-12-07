@@ -82,21 +82,21 @@ class MultiSigForm extends React.Component {
         }
       } else {
         // use address to fetch pubkey
-        let address = e.target.value;
-        if (address.length > 0) {
+    let address = e.target.value;
+    if (address.length > 0) {
           pubkey = await this.getPubkeyFromNode(address);
         }
       }
 
-      pubkeys[index].compressedPubkey = pubkey;
-      pubkeys[index].keyError = "";
-      this.setState({ pubkeys });
-    } catch (error) {
-      console.log(error);
-      const { pubkeys } = this.state;
-      pubkeys[index].keyError = error.message;
-      this.setState({ pubkeys });
-    }
+        pubkeys[index].compressedPubkey = pubkey;
+        pubkeys[index].keyError = "";
+        this.setState({ pubkeys });
+      } catch (error) {
+        console.log(error);
+        const { pubkeys } = this.state;
+        pubkeys[index].keyError = error.message;
+        this.setState({ pubkeys });
+      }
   };
 
   handleCreate = async () => {
