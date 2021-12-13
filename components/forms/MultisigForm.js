@@ -77,7 +77,7 @@ class MultiSigForm extends React.Component {
       console.log(pubkeys[index]);
       if (pubkeys[index].isPubkey) {
         pubkey = e.target.value;
-        if (pubkey.length !== 74) {
+        if (pubkey.length !== 44) {
           throw new Error("Invalid Secp256k1 pubkey");
         }
       } else {
