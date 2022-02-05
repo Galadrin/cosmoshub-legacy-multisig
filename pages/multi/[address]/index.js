@@ -30,6 +30,9 @@ const multipage = (props) => {
   const [accountOnChain, setAccountOnChain] = useState(null);
   const [accountError, setAccountError] = useState(null);
   const router = useRouter();
+  const handleTxShow = (isShow) => {
+    setShowTxForm(isShow);
+  };
 
   useEffect(() => {
     if (router.query.address) {
@@ -89,7 +92,7 @@ const multipage = (props) => {
             address={router.query.address}
             accountOnChain={accountOnChain}
             closeForm={() => {
-              setShowTxForm(false);
+              handleTxShow(false);
             }}
           />
         ) : (
@@ -107,7 +110,7 @@ const multipage = (props) => {
                 <Button
                   label="Create Transaction"
                   onClick={() => {
-                    setShowTxForm(true);
+                    handleTxShow(true);
                   }}
                 />
               </StackableContainer>
