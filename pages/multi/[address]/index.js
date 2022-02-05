@@ -20,15 +20,20 @@ function participantPubkeysFromMultisig(multisigPubkey) {
 function participantAddressesFromMultisig(multisigPubkey, addressPrefix) {
   return participantPubkeysFromMultisig(multisigPubkey).map((p) =>
     pubkeyToAddress(p, addressPrefix),
-  );
+    );
 }
 
 const multipage = (props) => {
   const { state } = useAppContext();
   const [showTxForm, setShowTxForm] = useState(false);
+  const [isCustomTx, setIsCustomTx] = useState(false);
   const [holdings, setHoldings] = useState("");
   const [accountOnChain, setAccountOnChain] = useState(null);
   const [accountError, setAccountError] = useState(null);
+  const handleTxShow = (isRaw) => {
+    setIsCustomTx(isRaw);
+    setShowTxForm(true);
+  };
   const router = useRouter();
 
   useEffect(() => {
@@ -88,6 +93,8 @@ const multipage = (props) => {
           <TransactionForm
             address={router.query.address}
             accountOnChain={accountOnChain}
+            isCustomTx={isCustomTx}
+            print
             closeForm={() => {
               setShowTxForm(false);
             }}
@@ -107,7 +114,13 @@ const multipage = (props) => {
                 <Button
                   label="Create Transaction"
                   onClick={() => {
-                    setShowTxForm(true);
+                    handleTxShow(false);
+                  }}
+                />
+                <Button
+                  label="Create Custom Transaction"
+                  onClick={() => {
+                    handleTxShow(true);
                   }}
                 />
               </StackableContainer>
